@@ -1,0 +1,23 @@
+package com.jwt_revision.JwtRevision.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api")
+public class TestEndpoints {
+    @GetMapping("/dashboard")
+    @PreAuthorize("hasRole('USER')")
+    public String hello(){
+        return "Hello secured world.";
+    }
+
+    @GetMapping("/landing")
+    public String helloUnsecured(){
+        return "Hello unsecured world.";
+    }
+}
