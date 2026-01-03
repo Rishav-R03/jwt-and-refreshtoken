@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class TestEndpoints {
-    @GetMapping("/dashboard")
+    @GetMapping("/user/dashboard")
     @PreAuthorize("hasRole('USER')")
     public String hello(){
         return "Hello secured world.";
     }
 
-    @GetMapping("/landing")
+    @GetMapping("/public/landing")
     public String helloUnsecured(){
         return "Hello unsecured world.";
     }
