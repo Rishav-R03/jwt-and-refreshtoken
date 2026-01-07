@@ -14,7 +14,7 @@ public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username){
+    public UserDetails loadUserByUsername(String username) {
         UserEntity user = userRepository.findByUsername(username).orElseThrow();
         return User
                 .withUsername(user.getUsername())

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestEndpoints {
     @GetMapping("/user/dashboard")
     @PreAuthorize("hasRole('USER')")
-    public String hello(){
+    public String hello() {
         return "Hello secured world.";
     }
 
     @GetMapping("/public/landing")
-    public String helloUnsecured(){
+    public String helloUnsecured() {
         return "Hello unsecured world.";
     }
 }

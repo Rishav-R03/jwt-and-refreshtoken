@@ -19,7 +19,7 @@ public class UserEntity {
     private Long id;
 
     @NotBlank(message = "username is required")
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @NotBlank(message = "password is required")

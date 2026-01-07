@@ -18,8 +18,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
 
-    public AuthResponse signUp(SignUpRequest request){
-        if(userRepository.findByUsername(request.getUsername()).isPresent()){
+    public AuthResponse signUp(SignUpRequest request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new UserAlreadyExistsException("Username already exists");
         }
 
@@ -30,9 +30,9 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
-//temp
+        // temp
         String accessToken = jwtService.generateToken(user.getUsername());
         String refreshToken = refreshTokenService.createRefreshToken(user.getUsername()).getToken();
-        return new AuthResponse(accessToken,refreshToken);
+        return new AuthResponse(accessToken, refreshToken);
     }
 }

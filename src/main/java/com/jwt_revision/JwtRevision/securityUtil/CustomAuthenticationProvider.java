@@ -16,23 +16,22 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Authentication authenticate(Authentication authentication){
+    public Authentication authenticate(Authentication authentication) {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
         UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-        if(!passwordEncoder.matches(password,userDetails.getPassword())){
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid credentials");
         }
         return new UsernamePasswordAuthenticationToken(
                 userDetails,
                 null,
-                userDetails.getAuthorities()
-        );
+                userDetails.getAuthorities());
     }
 
     @Override
-    public boolean supports(Class<?> authType){
+    public boolean supports(Class<?> authType) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authType);
     }
 }
