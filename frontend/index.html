@@ -108,22 +108,20 @@
                 });
 
                 if (response.status === 401 || response.status === 403) {
-                    // If unauthorized, attempt to refresh token
                     const refreshed = await attemptTokenRefresh();
-                    if (refreshed) {
-                        return fetchData(endpoint); // Retry the call
-                    } else {
-                        logout();
-                        return;
-                    }
+                    if (refreshed) return fetchData(endpoint);
+                    logout();
+                    return;
                 }
 
-                const text = await response.text();
+                // Changed from .text() to .json() to match the backend change
+                const data = await response.json();
                 responseDiv.className = "mt-4 alert alert-success";
-                responseDiv.innerText = text;
+                responseDiv.innerText = data.message; // Access the 'message' key
             } catch (error) {
+                console.error("Fetch error:", error);
                 responseDiv.className = "mt-4 alert alert-danger";
-                responseDiv.innerText = "Error fetching data.";
+                responseDiv.innerText = "Error: Check Console (F12) for details.";
             }
         }
 
