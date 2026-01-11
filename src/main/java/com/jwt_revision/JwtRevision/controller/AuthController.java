@@ -1,6 +1,7 @@
 package com.jwt_revision.JwtRevision.controller;
 
 import com.jwt_revision.JwtRevision.dto.AuthResponse;
+import com.jwt_revision.JwtRevision.dto.RefreshTokenDTO;
 import com.jwt_revision.JwtRevision.dto.SignUpRequest;
 import com.jwt_revision.JwtRevision.entity.RefreshToken;
 import com.jwt_revision.JwtRevision.jwtFiles.JwtService;
@@ -46,11 +47,10 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public AuthResponse refresh(@RequestBody String refreshToken){
-        RefreshToken token = refreshTokenService.validateRefreshToken(refreshToken);
-        String newAccessToken = jwtService.generateToken(token.getUsername());
-
-        return new AuthResponse(newAccessToken,refreshToken);
+    public AuthResponse refresh(@RequestBody RefreshTokenDTO refreshToken){
+        RefreshToken newRefreshToken = refreshTokenService.rotateRefreshToken(refreshToken.getRefreshToken());
+        String newAccessToken = jwtService.generateToken(newRefreshToken.getUsername());
+        return new AuthResponse(newAccessToken,refreshToken.getRefreshToken());
     }
 
     @PostMapping("/logout")

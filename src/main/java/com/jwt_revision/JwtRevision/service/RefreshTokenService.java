@@ -33,6 +33,7 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
+    // Old for just refresh token
     public RefreshToken validateRefreshToken(String token) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
                 .orElseThrow(() -> new InvalidRefreshTokenException("Invalid refresh token"));
@@ -42,5 +43,27 @@ public class RefreshTokenService {
             throw new RefreshTokenExpireException("Refresh Token Expired");
         }
         return refreshToken;
+    }
+
+    //For rotation based refresh token
+    public RefreshToken rotateRefreshToken(String oldToken){
+        RefreshToken existingToken = refreshTokenRepository.findByToken(oldToken).orElseThrow(()->new InvalidRefreshTokenException("Invalid refresh token"));
+        if(existingToken.getExpiryDate().isBefore(Instant.now())){
+            refreshTokenRepository.delete(existingToken);
+            throw new RefreshTokenExpireException("Refresh token expired");
+        }
+
+        // Critical Step: Invalidate old token
+        refreshTokenRepository.delete(existingToken);
+
+        // issue new refresh token
+        RefreshToken newToken = RefreshToken.builder()
+                .token(UUID.randomUUID().toString())
+                .username(existingToken.getUsername())
+                .expiryDate(
+                        Instant.now().plus(REFRESH_TOKEN_EXPIRY,ChronoUnit.DAYS)
+                )
+                .build();
+        return refreshTokenRepository.save(newToken);
     }
 }
