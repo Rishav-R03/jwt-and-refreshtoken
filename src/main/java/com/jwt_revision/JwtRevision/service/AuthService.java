@@ -18,7 +18,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
 
-    public AuthResponse signUp(SignUpRequest request) {
+    public AuthResponse signUpAsUser(SignUpRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new UserAlreadyExistsException("Username already exists");
         }
@@ -26,7 +26,25 @@ public class AuthService {
         UserEntity user = UserEntity.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role("USER")
+                .role("ROLE_USER")
+                .build();
+
+        userRepository.save(user);
+        // temp
+        String accessToken = jwtService.generateToken(user.getUsername());
+        String refreshToken = refreshTokenService.createRefreshToken(user.getUsername()).getToken();
+        return new AuthResponse(accessToken, refreshToken);
+    }
+
+    public AuthResponse signUpAsAdmin(SignUpRequest request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException("Username already exists");
+        }
+
+        UserEntity user = UserEntity.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role("ROLE_ADMIN")
                 .build();
 
         userRepository.save(user);

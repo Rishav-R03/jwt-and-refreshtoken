@@ -25,4 +25,15 @@ public class TestEndpoints {
     public ResponseEntity<Map<String,String>> helloUnsecured() {
         return ResponseEntity.ok(Map.of("message","Hello from public landing page"));
     }
+
+    @GetMapping("/admin/dashboard")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String,String>> adminEndpoint(){
+        return ResponseEntity.ok(Map.of("message","Welcome to admin dashboard"));
+    }
+    @GetMapping("/user/add-task")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Map<String,String>> userEndpoint(){
+        return ResponseEntity.ok(Map.of("message","Welcome to user create task"));
+    }
 }

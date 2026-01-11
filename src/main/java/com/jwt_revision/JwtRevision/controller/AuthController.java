@@ -23,9 +23,14 @@ public class AuthController {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenRepository refreshTokenRepository;
-    @PostMapping("/signup")
-    public AuthResponse signUp(@RequestBody SignUpRequest request){
-        return authService.signUp(request);
+    @PostMapping("/signup-user")
+    public AuthResponse signUpAsUser(@RequestBody SignUpRequest request){
+        return authService.signUpAsUser(request);
+    }
+
+    @PostMapping("/signup-admin")
+    public AuthResponse signUpAsAdmin(@RequestBody SignUpRequest request){
+        return authService.signUpAsAdmin(request);
     }
     @PostMapping("/login")
     public AuthResponse login(@RequestBody SignUpRequest request){
