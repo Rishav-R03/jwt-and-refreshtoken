@@ -56,16 +56,16 @@ public class SecurityConfig {
                 return config.getAuthenticationManager();
         }
 
-        //Define a CORS filter Bean to explicitly
+        // Define a CORS filter Bean to explicitly
         @Bean
-        public CorsConfigurationSource corsConfigurationSource(){
+        public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
                 configuration.setAllowedOrigins(Arrays.asList("*"));
-                configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
-                configuration.setAllowedHeaders(Arrays.asList("Authorization","Content-Type","Cache-Control"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
 
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                source.registerCorsConfiguration("/**",configuration);
+                source.registerCorsConfiguration("/**", configuration);
                 return source;
         }
 }

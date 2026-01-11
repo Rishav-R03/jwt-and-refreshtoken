@@ -1,6 +1,8 @@
 package com.jwt_revision.JwtRevision.service;
 
 import com.jwt_revision.JwtRevision.entity.RefreshToken;
+import com.jwt_revision.JwtRevision.exception.InvalidRefreshTokenException;
+import com.jwt_revision.JwtRevision.exception.RefreshTokenExpireException;
 import com.jwt_revision.JwtRevision.repository.RefreshTokenRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +35,11 @@ public class RefreshTokenService {
 
     public RefreshToken validateRefreshToken(String token) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+                .orElseThrow(() -> new InvalidRefreshTokenException("Invalid refresh token"));
 
         if (refreshToken.getExpiryDate().isBefore(Instant.now())) {
             refreshTokenRepository.delete(refreshToken);
-            throw new RuntimeException("Refresh Token Expired");
+            throw new RefreshTokenExpireException("Refresh Token Expired");
         }
         return refreshToken;
     }
